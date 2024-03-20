@@ -1,0 +1,7 @@
+version: "3"
+services:
+  book-db:
+    restart: always
+    build: ./dbconf
+    ports:
+      - "1435:1433"
