@@ -1,10 +1,13 @@
 package hu.danubius.bookservice.controller;
 
+import hu.danubius.bookservice.controller.model.CreateBookRequest;
 import hu.danubius.bookservice.controller.model.GetBooksResponse;
 import hu.danubius.bookservice.model.Book;
 import hu.danubius.bookservice.service.BookService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,4 +29,9 @@ public class BookController {
         return bookService.getBookById(id);
     }
 
+
+    @PostMapping("/books")
+    public void createBook(@RequestBody CreateBookRequest request) {
+        bookService.createBook(request);
+    }
 }
