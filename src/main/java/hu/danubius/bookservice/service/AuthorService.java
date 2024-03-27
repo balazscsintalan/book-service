@@ -37,8 +37,7 @@ public class AuthorService {
     }
 
     public void createAuthor(CreateAuthorRequest request) {
-        AuthorEntity newAuthor = new AuthorEntity();
-        newAuthor.setName(request.name());
+        AuthorEntity newAuthor = authorMapper.toEntity(request);
 
         authorRepository.save(newAuthor);
     }
@@ -48,7 +47,7 @@ public class AuthorService {
             .findById(id)
             .orElseThrow(() -> new IllegalStateException("Author not found by id"));
 
-        author.setName(request.name());
+        authorMapper.updateEntity(request, author);
 
         authorRepository.save(author);
     }
