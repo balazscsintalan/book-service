@@ -7,6 +7,7 @@ import hu.danubius.bookservice.model.Author;
 import hu.danubius.bookservice.service.AuthorService;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,5 +48,10 @@ public class AuthorController {
         @RequestBody @Valid UpdateAuthorRequest request
     ) {
         authorService.updateAuthor(id, request);
+    }
+
+    @DeleteMapping("/authors/{id}")
+    public void deleteAuthor(@PathVariable Long id) {
+        authorService.deleteAuthor(id);
     }
 }

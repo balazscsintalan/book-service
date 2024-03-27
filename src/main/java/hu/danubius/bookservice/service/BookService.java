@@ -54,4 +54,8 @@ public class BookService {
         bookMapper.updateEntity(request, bookEntity);
         bookRepository.save(bookEntity);
     }
+
+    public void deleteBook(Long id) {
+        bookRepository.deleteById(id);
+    }
 }
