@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
+@RequestMapping("/books")
 public class BookController {
 
     private final BookService bookService;
@@ -25,23 +27,23 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/books")
+    @GetMapping
     public GetBooksResponse getBooks() {
         return new GetBooksResponse(bookService.getBooks());
     }
 
-    @GetMapping("/books/{id}")
+    @GetMapping("/{id}")
     public Book getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
 
 
-    @PostMapping("/books")
+    @PostMapping
     public void createBook(@RequestBody @Valid CreateBookRequest request) {
         bookService.createBook(request);
     }
 
-    @PutMapping("/books/{id}")
+    @PutMapping("/{id}")
     public void updateBook(
         @PathVariable Long id,
         @RequestBody @Valid UpdateBookRequest request
@@ -49,7 +51,7 @@ public class BookController {
         bookService.updateBook(id, request);
     }
 
-    @DeleteMapping("/books/{id}")
+    @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
     }

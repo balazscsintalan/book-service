@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
+@RequestMapping("/authors")
 public class AuthorController {
 
     private final AuthorService authorService;
@@ -25,24 +27,24 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @GetMapping("/authors")
+    @GetMapping
     public GetAuthorsResponse getAuthors() {
         return new GetAuthorsResponse(
             authorService.getAuthors()
         );
     }
 
-    @GetMapping("/authors/{id}")
+    @GetMapping("/{id}")
     public Author getAuthorById(@PathVariable Long id) {
         return authorService.getAuthorById(id);
     }
 
-    @PostMapping("/authors")
+    @PostMapping
     public void createAuthor(@RequestBody @Valid CreateAuthorRequest request) {
         authorService.createAuthor(request);
     }
 
-    @PutMapping("/authors/{id}")
+    @PutMapping("/{id}")
     public void updateAuthor(
         @PathVariable Long id,
         @RequestBody @Valid UpdateAuthorRequest request
@@ -50,7 +52,7 @@ public class AuthorController {
         authorService.updateAuthor(id, request);
     }
 
-    @DeleteMapping("/authors/{id}")
+    @DeleteMapping("/{id}")
     public void deleteAuthor(@PathVariable Long id) {
         authorService.deleteAuthor(id);
     }
