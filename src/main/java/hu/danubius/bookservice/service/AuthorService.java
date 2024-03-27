@@ -1,5 +1,6 @@
 package hu.danubius.bookservice.service;
 
+import hu.danubius.bookservice.controller.model.CreateAuthorRequest;
 import hu.danubius.bookservice.entity.AuthorEntity;
 import hu.danubius.bookservice.model.Author;
 import hu.danubius.bookservice.repository.AuthorRepository;
@@ -29,5 +30,12 @@ public class AuthorService {
             .orElseThrow(() -> new IllegalStateException("Author not found by id"));
 
         return new Author(author.getName());
+    }
+
+    public void createAuthor(CreateAuthorRequest request) {
+        AuthorEntity newAuthor = new AuthorEntity();
+        newAuthor.setName(request.name());
+
+        authorRepository.save(newAuthor);
     }
 }
