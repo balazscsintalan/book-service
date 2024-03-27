@@ -1,6 +1,7 @@
 package hu.danubius.bookservice.service;
 
 import hu.danubius.bookservice.controller.model.CreateBookRequest;
+import hu.danubius.bookservice.controller.model.UpdateBookRequest;
 import hu.danubius.bookservice.entity.BookEntity;
 import hu.danubius.bookservice.model.Book;
 import hu.danubius.bookservice.repository.BookRepository;
@@ -58,5 +59,19 @@ public class BookService {
         newBook.setTotalPages(request.totalPages());
 
         bookRepository.save(newBook);
+    }
+
+    public void updateBook(Long id, UpdateBookRequest request) {
+        Optional<BookEntity> book = bookRepository.findById(id);
+
+        BookEntity bookEntity = book
+            .orElseThrow(() -> new IllegalStateException("Book by id not found"));
+
+        bookEntity.setTotalPages(request.totalPages());
+        bookEntity.setTitle(request.title());
+        bookEntity.setPublishedDate(request.publishedDate());
+        bookEntity.setIsbn(request.isbn());
+
+        bookRepository.save(bookEntity);
     }
 }

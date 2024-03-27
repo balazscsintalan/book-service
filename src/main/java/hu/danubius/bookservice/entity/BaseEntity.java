@@ -6,11 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-@EntityListeners(BaseEntityListener.class)
+@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 
     @Id
@@ -18,11 +22,25 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    @Column(name = "VERSION")
+    private int version;
+
     @Column(name = "CREATED_DATE")
+    @CreatedDate
     private LocalDateTime createdDate;
 
     @Column(name = "LAST_MODIFIED_DATE")
+    @LastModifiedDate
     private LocalDateTime lastModifiedDate;
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     public Long getId() {
         return id;
