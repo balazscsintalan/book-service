@@ -5,6 +5,8 @@ import hu.danubius.bookservice.model.Book;
 import java.util.List;
 
 public record GetBooksResponse(
-    List<Book> books
+    List<Book> books,
+    int totalPages,
+    long totalElements
 ) {
 }

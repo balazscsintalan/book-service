@@ -1,6 +1,7 @@
 package hu.danubius.bookservice.service;
 
 import hu.danubius.bookservice.controller.model.CreateBookRequest;
+import hu.danubius.bookservice.controller.model.GetBooksResponse;
 import hu.danubius.bookservice.controller.model.UpdateBookRequest;
 import hu.danubius.bookservice.entity.BookEntity;
 import hu.danubius.bookservice.error.BookServiceException;
@@ -8,6 +9,9 @@ import hu.danubius.bookservice.error.ErrorCodes;
 import hu.danubius.bookservice.mapper.BookMapper;
 import hu.danubius.bookservice.model.Book;
 import hu.danubius.bookservice.repository.BookRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,13 +28,20 @@ public class BookService {
         this.bookMapper = bookMapper;
     }
 
-    public List<Book> getBooks() {
-        List<BookEntity> bookEntities = bookRepository.findAll();
+    public GetBooksResponse getBooks(int pageNumber, int size) {
+        Pageable page = PageRequest.of(pageNumber, size);
 
-        return bookEntities.stream()
-//            .filter(bookEntity -> bookEntity.getIsbn().equals("3afasda"))
+        Page<BookEntity> bookEntityPage = bookRepository.findAll(page);
+
+        List<Book> books = bookEntityPage.getContent().stream()
             .map(bookMapper::toDto)
             .toList();
+
+        return new GetBooksResponse(
+            books,
+            bookEntityPage.getTotalPages(),
+            bookEntityPage.getTotalElements()
+        );
     }
 
     public Book getBookById(Long id) {
