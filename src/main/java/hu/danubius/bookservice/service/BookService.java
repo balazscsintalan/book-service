@@ -3,6 +3,8 @@ package hu.danubius.bookservice.service;
 import hu.danubius.bookservice.controller.model.CreateBookRequest;
 import hu.danubius.bookservice.controller.model.UpdateBookRequest;
 import hu.danubius.bookservice.entity.BookEntity;
+import hu.danubius.bookservice.error.BookServiceException;
+import hu.danubius.bookservice.error.ErrorCodes;
 import hu.danubius.bookservice.mapper.BookMapper;
 import hu.danubius.bookservice.model.Book;
 import hu.danubius.bookservice.repository.BookRepository;
@@ -35,7 +37,11 @@ public class BookService {
         Optional<BookEntity> book = bookRepository.findById(id);
 
         BookEntity bookEntity = book
-            .orElseThrow(() -> new IllegalStateException("Book by id not found"));
+            .orElseThrow(() -> new BookServiceException(
+                String.format("Book not found by id: %s", id),
+                "Book not found",
+                ErrorCodes.NOT_FOUND
+            ));
 
         return bookMapper.toDto(bookEntity);
     }
@@ -49,7 +55,11 @@ public class BookService {
         Optional<BookEntity> book = bookRepository.findById(id);
 
         BookEntity bookEntity = book
-            .orElseThrow(() -> new IllegalStateException("Book by id not found"));
+            .orElseThrow(() -> new BookServiceException(
+                String.format("Book not found by id: %s", id),
+                "Book not found",
+                ErrorCodes.NOT_FOUND
+            ));
 
         bookMapper.updateEntity(request, bookEntity);
         bookRepository.save(bookEntity);
