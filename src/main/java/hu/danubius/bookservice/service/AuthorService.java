@@ -1,7 +1,9 @@
 package hu.danubius.bookservice.service;
 
 import hu.danubius.bookservice.controller.model.CreateAuthorRequest;
+import hu.danubius.bookservice.controller.model.UpdateAuthorRequest;
 import hu.danubius.bookservice.entity.AuthorEntity;
+import hu.danubius.bookservice.mapper.AuthorMapper;
 import hu.danubius.bookservice.model.Author;
 import hu.danubius.bookservice.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
@@ -12,15 +14,17 @@ import java.util.List;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final AuthorMapper authorMapper;
 
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper) {
         this.authorRepository = authorRepository;
+        this.authorMapper = authorMapper;
     }
 
     public List<Author> getAuthors() {
         return authorRepository.findAll()
             .stream()
-            .map(authorEntity -> new Author(authorEntity.getName()))
+            .map(authorMapper::toDto)
             .toList();
     }
 
@@ -29,7 +33,7 @@ public class AuthorService {
             .findById(id)
             .orElseThrow(() -> new IllegalStateException("Author not found by id"));
 
-        return new Author(author.getName());
+        return authorMapper.toDto(author);
     }
 
     public void createAuthor(CreateAuthorRequest request) {
@@ -37,5 +41,15 @@ public class AuthorService {
         newAuthor.setName(request.name());
 
         authorRepository.save(newAuthor);
+    }
+
+    public void updateAuthor(Long id, UpdateAuthorRequest request) {
+        AuthorEntity author = authorRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalStateException("Author not found by id"));
+
+        author.setName(request.name());
+
+        authorRepository.save(author);
     }
 }

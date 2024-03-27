@@ -3,6 +3,7 @@ package hu.danubius.bookservice.service;
 import hu.danubius.bookservice.controller.model.CreateBookRequest;
 import hu.danubius.bookservice.controller.model.UpdateBookRequest;
 import hu.danubius.bookservice.entity.BookEntity;
+import hu.danubius.bookservice.mapper.BookMapper;
 import hu.danubius.bookservice.model.Book;
 import hu.danubius.bookservice.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -14,50 +15,33 @@ import java.util.Optional;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
-    public BookService(BookRepository bookRepository) {
+    public BookService(BookRepository bookRepository, BookMapper bookMapper) {
         this.bookRepository = bookRepository;
+        this.bookMapper = bookMapper;
     }
 
     public List<Book> getBooks() {
         List<BookEntity> bookEntities = bookRepository.findAll();
 
-//        List<Book> books = new ArrayList<>();
-//
-//        for (BookEntity bookEntity : bookEntities) {
-//            Book newBook = new Book(bookEntity.getTitle());
-//            books.add(newBook);
-//        }
-
         return bookEntities.stream()
 //            .filter(bookEntity -> bookEntity.getIsbn().equals("3afasda"))
-            .map(bookEntity -> new Book(bookEntity.getTitle()))
+            .map(bookMapper::toDto)
             .toList();
     }
 
     public Book getBookById(Long id) {
         Optional<BookEntity> book = bookRepository.findById(id);
-//        Optional<BookEntity> book = bookRepository.findByIsbn("3afasda");
-
-//        if (book.isPresent()) {
-//            BookEntity bookEntity = book.get();
-//        } else {
-//            throw new IllegalStateException("Book by id not found");
-//        }
 
         BookEntity bookEntity = book
             .orElseThrow(() -> new IllegalStateException("Book by id not found"));
 
-        return new Book(bookEntity.getTitle());
+        return bookMapper.toDto(bookEntity);
     }
 
     public void createBook(CreateBookRequest request) {
-        BookEntity newBook = new BookEntity();
-        newBook.setIsbn(request.isbn());
-        newBook.setTitle(request.title());
-        newBook.setPublishedDate(request.publishedDate());
-        newBook.setTotalPages(request.totalPages());
-
+        BookEntity newBook = bookMapper.toEntity(request);
         bookRepository.save(newBook);
     }
 
@@ -67,11 +51,7 @@ public class BookService {
         BookEntity bookEntity = book
             .orElseThrow(() -> new IllegalStateException("Book by id not found"));
 
-        bookEntity.setTotalPages(request.totalPages());
-        bookEntity.setTitle(request.title());
-        bookEntity.setPublishedDate(request.publishedDate());
-        bookEntity.setIsbn(request.isbn());
-
+        bookMapper.updateEntity(request, bookEntity);
         bookRepository.save(bookEntity);
     }
 }
