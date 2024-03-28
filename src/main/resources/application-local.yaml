@@ -9,3 +9,4 @@ spring:
       enabled: true
   jpa:
     defer-datasource-initialization: true
+#    generate-ddl: true

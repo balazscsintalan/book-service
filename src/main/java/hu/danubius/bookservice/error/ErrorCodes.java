@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCodes {
     NOT_FOUND(HttpStatus.NOT_FOUND),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR),
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST)
     ;
 
     private final HttpStatus httpStatus;

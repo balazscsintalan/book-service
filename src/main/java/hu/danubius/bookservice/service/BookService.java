@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +46,13 @@ public class BookService {
         );
     }
 
+    @Transactional
+    public void createBook(CreateBookRequest request) {
+        BookEntity newBook = bookMapper.toEntity(request);
+        bookRepository.save(newBook);
+    }
+
+    @Transactional(readOnly = true)
     public Book getBookById(Long id) {
         Optional<BookEntity> book = bookRepository.findById(id);
 
@@ -57,11 +66,7 @@ public class BookService {
         return bookMapper.toDto(bookEntity);
     }
 
-    public void createBook(CreateBookRequest request) {
-        BookEntity newBook = bookMapper.toEntity(request);
-        bookRepository.save(newBook);
-    }
-
+    @Transactional
     public void updateBook(Long id, UpdateBookRequest request) {
         Optional<BookEntity> book = bookRepository.findById(id);
 
@@ -76,6 +81,7 @@ public class BookService {
         bookRepository.save(bookEntity);
     }
 
+    @Transactional
     public void deleteBook(Long id) {
         bookRepository.deleteById(id);
     }

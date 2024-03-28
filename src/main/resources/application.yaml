@@ -1,6 +1,8 @@
 spring:
   application:
     name: book-service
+  jpa:
+    openInView: false
 
 server:
   port: 8081
