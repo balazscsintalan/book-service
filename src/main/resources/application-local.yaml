@@ -7,6 +7,9 @@ spring:
   h2:
     console:
       enabled: true
-  jpa:
-    defer-datasource-initialization: true
+#  jpa:
+#    defer-datasource-initialization: true
 #    generate-ddl: true
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
