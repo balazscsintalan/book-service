@@ -5,6 +5,8 @@ import hu.danubius.bookservice.controller.model.GetAuthorsResponse;
 import hu.danubius.bookservice.controller.model.UpdateAuthorRequest;
 import hu.danubius.bookservice.model.Author;
 import hu.danubius.bookservice.service.AuthorService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Validated
 @RequestMapping("/authors")
+@Tags(value = @Tag(name = "book-service"))
 public class AuthorController {
 
     private final AuthorService authorService;
